@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 )
@@ -13,6 +14,10 @@ const (
 	Shot
 	Injured
 	Killed
+)
+
+var (
+	ErrDoubleShot = errors.New("Already shoot there")
 )
 
 func (s State) String() string {
@@ -131,7 +136,7 @@ func (b *Board) Shoot(y, x int) error {
 	case Ship:
 		ns = Injured
 	default:
-		return fmt.Errorf("Already shoot there: (%d, %d)", x, y)
+		return ErrDoubleShot
 	}
 	b.Board[y][x] = ns
 	return nil

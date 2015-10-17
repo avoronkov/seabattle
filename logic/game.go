@@ -49,17 +49,26 @@ func (g *Game) Play() (err error) {
 	var (
 		y, x int
 	)
+L:
 	for {
 		g.iface.Draw()
 		if !g.my.HasShipsAlive() {
 			g.iface.ShowResult(model.Loose)
 			break
 		}
-		if y, x, err = g.iface.GetShoot(); err != nil {
-			break
-		}
-		if err = g.other.Shoot(y, x); err != nil {
-			break
+		for {
+			if y, x, err = g.iface.GetShoot(); err != nil {
+				break L
+			}
+			e := g.other.Shoot(y, x)
+			if e == nil {
+				break
+			}
+			if e != model.ErrDoubleShot {
+				err = e
+				break L
+			}
+			g.iface.Draw()
 		}
 
 		g.iface.Draw()

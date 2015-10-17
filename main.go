@@ -9,6 +9,7 @@ import (
 
 	"github.com/avoronkov/seabattle/logic"
 	_ "github.com/avoronkov/seabattle/logic/ai/random"
+	"github.com/avoronkov/seabattle/view"
 	_ "github.com/avoronkov/seabattle/view/curses"
 )
 
@@ -22,6 +23,9 @@ func main() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("Panic: %v : %s", r, debug.Stack())
 		}
+		if err == view.ErrUserEndedGame {
+			err = nil
+		}
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error occured: %v\n", err)
 			os.Exit(1)
@@ -32,7 +36,7 @@ func main() {
 		return
 	}
 	defer func() {
-		err = game.Close()
+		game.Close()
 	}()
 	err = game.Play()
 }

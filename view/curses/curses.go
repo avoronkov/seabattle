@@ -1,7 +1,6 @@
 package curses
 
 import (
-	"errors"
 	"fmt"
 	"log"
 
@@ -165,7 +164,7 @@ func (v *CursesView) GetShoot() (y int, x int, err error) {
 		case ' ':
 			cx, cy = -1, -1
 		case 'q':
-			err = errors.New("User finished the game")
+			err = view.ErrUserEndedGame
 			return
 		}
 		if cx >= 0 && cy >= 0 {

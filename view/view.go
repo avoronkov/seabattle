@@ -1,6 +1,7 @@
 package view
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/avoronkov/seabattle/model"
@@ -28,3 +29,7 @@ func GetView(v string) (in Interface, err error) {
 	in, err = maker()
 	return
 }
+
+var (
+	ErrUserEndedGame = errors.New("User finished the game")
+)
